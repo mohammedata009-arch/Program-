@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>محاكي ويندوز لتعلم البرمجة</title>
+    <style>
+        /* تصميم سطح المكتب */
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        #desktop {
+            background: linear-gradient(45deg, #0078D7, #00bcf2);
+            height: 100vh;
+            position: relative;
+        }
+        /* أيقونة البرنامج */
+        .icon {
+            width: 80px; text-align: center; color: white;
+            cursor: pointer; padding: 10px; margin: 20px;
+        }
+        .icon:hover { background: rgba(255,255,255,0.2); border-radius: 5px; }
+        .icon img { width: 50px; display: block; margin: 0 auto 5px; }
+
+        /* نافذة البرنامج */
+        #window {
+            width: 900px; height: 600px;
+            background: #f0f0f0;
+            position: absolute; top: 50px; left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none; flex-direction: column;
+            border-radius: 8px 8px 0 0;
+        }
+        .title-bar {
+            background: #ffffff; padding: 10px;
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #ccc; border-radius: 8px 8px 0 0;
+        }
+        .close-btn { color: red; cursor: pointer; font-weight: bold; }
+
+        /* منطقة العمل: محرر ومنطقة عرض */
+        .work-area { display: flex; flex: 1; padding: 10px; gap: 10px; }
+        textarea {
+            flex: 1; background: #1e1e1e; color: #d4d4d4;
+            font-family: 'Consolas', monospace; padding: 15px;
+            border: none; border-radius: 5px; resize: none; outline: none;
+        }
+        iframe {
+            flex: 1; background: white; border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* شريط المهام */
+        #taskbar {
+            position: absolute; bottom: 0; width: 100%;
+            height: 40px; background: rgba(0,0,0,0.85);
+            display: flex; align-items: center; padding: 0 10px;
+        }
+        .start-btn { color: white; font-weight: bold; margin-left: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="desktop">
+    <div class="icon" onclick="openWindow()">
+        <span style="font-size: 40px;">📝</span>
+        <span>محرر HTML</span>
+    </div>
+
+    <div id="window">
+        <div class="title-bar">
+            <span>برنامج تعلم HTML - محرر الأكواد</span>
+            <span class="close-btn" onclick="closeWindow()">✖</span>
+        </div>
+        <div style="padding: 5px 15px; background: #eee; font-size: 13px;">
+            اكتب الكود في اليسار وشاهد النتيجة في اليمين:
+        </div>
+        <div class="work-area">
+            <textarea id="codeEditor" oninput="updatePreview()" placeholder="اكتب كود HTML هنا..."><h1 style="color: blue;">أهلاً بك يا محمد!</h1>
+<p>جرب تغيير هذا النص أو لون العنوان.</p></textarea>
+            
+            <iframe id="preview"></iframe>
+        </div>
+    </div>
+
+    <div id="taskbar">
+        <div class="start-btn">🪟 Start</div>
+    </div>
+</div>
+
+<script>
+    // وظيفة فتح النافذة
+    function openWindow() {
+        document.getElementById('window').style.display = 'flex';
+        updatePreview();
+    }
+
+    // وظيفة إغلاق النافذة
+    function closeWindow() {
+        document.getElementById('window').style.display = 'none';
+    }
+
+    // وظيفة تحديث العرض فوراً عند الكتابة
+    function updatePreview() {
+        const code = document.getElementById('codeEditor').value;
+        const previewFrame = document.getElementById('preview').contentWindow.document;
+        previewFrame.open();
+        previewFrame.write(code);
+        previewFrame.close();
+    }
+
+    // تشغيل العرض الأولي
+    updatePreview();
+</script>
+
+</body>
+</html>
