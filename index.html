@@ -2,107 +2,144 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>محاكي ويندوز لتعلم البرمجة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التدريب البرمجية | الأستاذ محمد طه</title>
     <style>
-        /* تصميم سطح المكتب */
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg-dark: #0f172a;
+            --editor-bg: #1e1e2e;
         }
-        #desktop {
-            background: linear-gradient(45deg, #0078D7, #00bcf2);
-            height: 100vh;
-            position: relative;
-        }
-        /* أيقونة البرنامج */
-        .icon {
-            width: 80px; text-align: center; color: white;
-            cursor: pointer; padding: 10px; margin: 20px;
-        }
-        .icon:hover { background: rgba(255,255,255,0.2); border-radius: 5px; }
-        .icon img { width: 50px; display: block; margin: 0 auto 5px; }
 
-        /* نافذة البرنامج */
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: white; overflow: hidden;
+        }
+
+        #desktop { height: 100vh; position: relative; }
+
+        .main-icon {
+            width: 100px; text-align: center; cursor: pointer;
+            transition: 0.3s; margin: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px; border-radius: 20px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .main-icon:hover { transform: scale(1.1); background: rgba(255, 255, 255, 0.2); }
+
         #window {
-            width: 900px; height: 600px;
-            background: #f0f0f0;
-            position: absolute; top: 50px; left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: none; flex-direction: column;
-            border-radius: 8px 8px 0 0;
+            width: 95%; height: 88vh;
+            background: rgba(30, 41, 59, 0.98);
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 16px; display: none; flex-direction: column;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.1);
         }
+
         .title-bar {
-            background: #ffffff; padding: 10px;
-            display: flex; justify-content: space-between;
-            border-bottom: 1px solid #ccc; border-radius: 8px 8px 0 0;
+            background: rgba(255,255,255,0.05); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .close-btn { color: red; cursor: pointer; font-weight: bold; }
 
-        /* منطقة العمل: محرر ومنطقة عرض */
-        .work-area { display: flex; flex: 1; padding: 10px; gap: 10px; }
+        .controls {
+            padding: 10px 20px; background: rgba(0,0,0,0.3);
+            display: flex; gap: 15px; align-items: center;
+        }
+
+        .btn {
+            padding: 10px 18px; border: none; border-radius: 8px;
+            cursor: pointer; font-weight: 600; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px; color: white;
+        }
+        .btn-check { background: var(--primary); }
+        .btn-wa { background: #25D366; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        .work-area { display: flex; flex: 1; padding: 15px; gap: 15px; }
+
+        .editor-container { flex: 1; display: flex; flex-direction: column; }
         textarea {
-            flex: 1; background: #1e1e1e; color: #d4d4d4;
+            flex: 1; background: var(--editor-bg); color: #f8f8f2;
             font-family: 'Consolas', monospace; padding: 15px;
-            border: none; border-radius: 5px; resize: none; outline: none;
-        }
-        iframe {
-            flex: 1; background: white; border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 12px; border: 1px solid #444; resize: none;
+            outline: none; direction: ltr; text-align: left; font-size: 15px;
         }
 
-        /* شريط المهام */
-        #taskbar {
-            position: absolute; bottom: 0; width: 100%;
-            height: 40px; background: rgba(0,0,0,0.85);
-            display: flex; align-items: center; padding: 0 10px;
-        }
-        .start-btn { color: white; font-weight: bold; margin-left: 20px; }
+        .preview-container { flex: 1; background: white; border-radius: 12px; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        .close-btn { color: #ff5f56; cursor: pointer; font-size: 20px; font-weight: bold; }
+        #trainee-name-display { color: #a855f7; font-weight: bold; margin-right: 10px; }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div id="desktop">
-    <div class="icon" onclick="openWindow()">
-        <span style="font-size: 40px;">📝</span>
-        <span>محرر HTML</span>
+    <div class="main-icon" onclick="startSession()">
+        <div style="font-size: 50px;">💻</div>
+        <div style="margin-top: 10px; font-weight: bold;">محرر الأكواد</div>
     </div>
 
     <div id="window">
         <div class="title-bar">
-            <span>برنامج تعلم HTML - محرر الأكواد</span>
-            <span class="close-btn" onclick="closeWindow()">✖</span>
+            <div>
+                <span style="font-weight:bold;">بيئة المتدرب: </span>
+                <span id="trainee-name-display"></span>
+            </div>
+            <span class="close-btn" onclick="closeWindow()">✕</span>
         </div>
-        <div style="padding: 5px 15px; background: #eee; font-size: 13px;">
-            اكتب الكود في اليسار وشاهد النتيجة في اليمين:
+        
+        <div class="controls">
+            <button class="btn btn-check" onclick="validateCode()">🔍 فحص أسطر الخطأ</button>
+            <button class="btn btn-wa" onclick="sendWhatsApp()">📱 إرسال الكود للمعلم</button>
         </div>
-        <div class="work-area">
-            <textarea id="codeEditor" oninput="updatePreview()" placeholder="اكتب كود HTML هنا..."><h1 style="color: blue;">أهلاً بك يا محمد!</h1>
-<p>جرب تغيير هذا النص أو لون العنوان.</p></textarea>
-            
-            <iframe id="preview"></iframe>
-        </div>
-    </div>
 
-    <div id="taskbar">
-        <div class="start-btn">🪟 Start</div>
+        <div class="work-area">
+            <div class="editor-container">
+                <textarea id="codeEditor" oninput="updatePreview()" spellcheck="false" placeholder="اكتب كود HTML هنا..."></textarea>
+            </div>
+            <div class="preview-container">
+                <iframe id="preview"></iframe>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // وظيفة فتح النافذة
+    const MY_PHONE = "249901946410";
+    let traineeName = "";
+
+    function startSession() {
+        // طلب اسم المتدرب
+        traineeName = prompt("أيها المتدرب، يرجى إدخال اسمك الرباعي للمتابعة:");
+        
+        if (traineeName && traineeName.trim() !== "") {
+            document.getElementById('trainee-name-display').innerText = traineeName;
+            openWindow();
+        } else {
+            alert("يجب إدخال الاسم لفتح المحرر!");
+        }
+    }
+
     function openWindow() {
         document.getElementById('window').style.display = 'flex';
+        if(!document.getElementById('codeEditor').value) {
+            document.getElementById('codeEditor').value = `\n<html>\n  <body>\n    <h1>أهلاً بك يا ${traineeName}</h1>\n    <p>ابدأ بكتابة كودك الأول هنا...</p>\n  </body>\n</html>`;
+        }
         updatePreview();
     }
 
-    // وظيفة إغلاق النافذة
     function closeWindow() {
-        document.getElementById('window').style.display = 'none';
+        if(confirm("هل تريد إغلاق المحرر؟ تأكد من إرسال الكود أولاً.")) {
+            document.getElementById('window').style.display = 'none';
+        }
     }
 
-    // وظيفة تحديث العرض فوراً عند الكتابة
     function updatePreview() {
         const code = document.getElementById('codeEditor').value;
         const previewFrame = document.getElementById('preview').contentWindow.document;
@@ -111,9 +148,44 @@
         previewFrame.close();
     }
 
-    // تشغيل العرض الأولي
-    updatePreview();
-</script>
+    function validateCode() {
+        const code = document.getElementById('codeEditor').value;
+        const lines = code.split('\n');
+        let errorMessages = [];
+        const tagsToWatch = ['html', 'body', 'h1', 'p', 'b', 'div', 'head', 'title'];
 
+        lines.forEach((line, index) => {
+            tagsToWatch.forEach(tag => {
+                const openTag = `<${tag}>`;
+                const closeTag = `</${tag}>`;
+                if (line.includes(openTag)) {
+                    const totalOpen = (code.match(new RegExp("<" + tag + ">", "g")) || []).length;
+                    const totalClose = (code.match(new RegExp("</" + tag + ">", "g")) || []).length;
+                    if (totalOpen > totalClose) {
+                        errorMessages.push(`⚠️ السطر ${index + 1}: وسم <${tag}> مفتوح ولم يتم إغلاقه.`);
+                    }
+                }
+            });
+        });
+
+        if (errorMessages.length > 0) {
+            alert("تنبيه للمتدرب " + traineeName + ":\n\n" + [...new Set(errorMessages)].join("\n"));
+        } else {
+            alert("ممتاز يا " + traineeName + "! الكود سليم.");
+        }
+    }
+
+    function sendWhatsApp() {
+        const code = document.getElementById('codeEditor').value;
+        const fullMsg = `الاسم: ${traineeName}\n\nالكود المنجز:\n${code}`;
+        const encodedMsg = encodeURIComponent(fullMsg);
+        window.open(`https://wa.me/${MY_PHONE}?text=${encodedMsg}`, '_blank');
+    }
+
+    // منع الاختصارات
+    document.onkeydown = function(e) {
+        if (e.keyCode == 123 || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 67))) return false;
+    };
+</script>
 </body>
 </html>
